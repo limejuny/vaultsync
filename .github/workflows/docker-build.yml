@@ -8,8 +8,8 @@ on:
       - ".github/workflows/docker-build.yml"
 
 env:
-  DOCKER_REPO: ${{ env.DOCKER_REPO }}
-  DOCKER_USERNAME: ${{ env.DOCKER_USERNAME }}
+  DOCKER_REPO: "limejuny/bw-cli"
+  DOCKER_USERNAME: "limejuny"
   DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
 
 jobs:
