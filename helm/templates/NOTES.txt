@@ -1,0 +1,4 @@
+{{- $JobName := .Chart.Name -}}
+
+{{- printf "To view the status of the cron job, run:\n\tkubectl get cronjobs/%s\n" $JobName }}
+{{- printf "To view the logs of the latest job run, run:\n\tkubectl logs -f $(kubectl get pods --selector=job-name=%s --output=jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | tail -n 1)\n" $JobName }}
