@@ -21,8 +21,8 @@ spec:
             - name: {{ $job.name }}
               image: "{{ $job.image.repository }}:{{ $job.image.tag }}"
               imagePullPolicy: {{ $job.image.pullPolicy }}
-              {{- if $job.command }}
-              command: {{ $job.command | quote }}
+              {{- with $job.command }}
+              command: {{ toYaml . | nindent 16 }}
               {{- end }}
               {{- with $job.args }}
               args: {{ toYaml . | nindent 16 }}
@@ -30,9 +30,9 @@ spec:
               {{- with $job.env }}
               env: {{ toYaml . | nindent 16 }}
               {{- end }}
-              {{- with $job.envFrom }}
-              envFrom: {{ toYaml . | nindent 16 }}
-              {{- end }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "helm.fullname" $ }}
               {{- with $job.resources }}
               resources: {{ toYaml . | nindent 16 }}
               {{- end }}

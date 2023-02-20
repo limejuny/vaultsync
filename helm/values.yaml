@@ -1,4 +1,36 @@
 jobs:
+  - name: vaultbackup
+    image:
+      repository: limejuny/alpine-curl
+      tag: latest
+      pullPolicy: IfNotPresent
+    schedule: "*/10 * * * *"
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        #!/bin/sh
+        mkdir /app/data -p
+        cp -r /data/db.sqlite3* /app/data
+        cp -r /data/rsa_key.* /app/data
+        cp -r /data/attachments /app/data
+        cp -r /data/sends /app/data
+        export DATE=$(date +%Y%m%d-%H%M)
+        tar -zcvf $DATE.tar.gz data
+        curl -X PUT -T $DATE.tar.gz $PAR_URL/data/vault-$DATE.tar.gz
+    env:
+      - name: TZ
+        value: Asia/Seoul
+    volumeMounts:
+      - name: data
+        mountPath: /data
+    volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: vaultwarden
+    concurrencyPolicy: Forbid
+    restartPolicy: Never
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 1
   - name: vaultsync
     image:
       repository: limejuny/bw-cli
@@ -72,6 +104,9 @@ jobs:
       # readOnlyRootFilesystem: true
       # runAsNonRoot: true
       # runAsUser: 1000
+
+oci:
+  par_url: ""
 
 vaultwarden:
   server_url: ""
