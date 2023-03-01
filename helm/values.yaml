@@ -29,83 +29,79 @@ jobs:
           claimName: vaultwarden
     concurrencyPolicy: Forbid
     restartPolicy: Never
-    successfulJobsHistoryLimit: 3
+    successfulJobsHistoryLimit: 1
     failedJobsHistoryLimit: 1
-  - name: vaultsync
-    image:
-      repository: limejuny/bw-cli
-      tag: latest
-      pullPolicy: IfNotPresent
-    schedule: "*/5 * * * *"
-    command: ["/bin/bash", "-c"]
-    args:
-      - |
-        #!/bin/bash
-        # TODO: EDIT
-        set -e
-        set -x
-        echo "start sync"
-        bw config server ${VW_SERVER}
-        BW_CLIENTID=${VW_ID} BW_CLIENTSECRET=${VW_TOKEN} bw login --apikey --raw
-        export BW_SESSION=$(bw unlock --passwordenv BW_PASSWORD --raw)
-        bw export --output vault.json --format json --raw
-        bw logout
-        echo "end sync"
+  #- name: vaultsync
+  #  image:
+  #    repository: limejuny/bw-cli
+  #    tag: 8
+  #    pullPolicy: IfNotPresent
+  #  schedule: "*/5 * * 1 *"
+  #  command: ["/bin/bash", "-c"]
+  #  args:
+  #    - |
+  #      #!/bin/bash
+  #      set -e
+  #      set -x
+  #      bw config server ${VW_SERVER}
+  #      BW_CLIENTID=${VW_ID} BW_CLIENTSECRET=${VW_TOKEN} bw login --apikey --raw
+  #      export BW_SESSION=$(bw unlock --passwordenv VW_MASTER --raw)
+  #      bw export --output vaultwarden.json --format json --raw
+  #      bw logout
 
-        echo "start migrate"
-        bw config server "https://vault.bitwarden.com"
-        BW_CLIENTID=${VW_ID} BW_CLIENTSECRET=${VW_TOKEN} bw login --apikey --raw
-        export BW_SESSION=$(bw unlock --passwordenv BW_PASSWORD --raw)
-        bw export --output bit.json --format json --raw
-        bw import bitwardenjson vaultwarden.json
-        bw logout
-        echo "end migrate"
-        # TODO: EDIT
-    env:
-      - name: TZ
-        value: Asia/Seoul
-    envFrom:
-      - secretRef:
-          name: VW_URL
-      - secretRef:
-          name: VW_ID
-      - secretRef:
-          name: VW_TOKEN
-      - secretRef:
-          name: VW_MASTER
-      - secretRef:
-          name: BW_ID
-      - secretRef:
-          name: BW_TOKEN
-      - secretRef:
-          name: BW_MASTER
-    resources: {}
-      # We usually recommend not to specify default resources and to leave this as a conscious
-      # choice for the user. This also increases chances charts run on environments with little
-      # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      # limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      # requests:
-      #   cpu: 100m
-      #   memory: 128Mi
-    concurrencyPolicy: Forbid
-    restartPolicy: Never
-    successfulJobsHistoryLimit: 3
-    failedJobsHistoryLimit: 1
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    securityContext: {}
-      # capabilities:
-      #   drop:
-      #   - ALL
-      # readOnlyRootFilesystem: true
-      # runAsNonRoot: true
-      # runAsUser: 1000
+  #      bw config server "https://vault.bitwarden.com"
+  #      BW_CLIENTID=${BW_ID} BW_CLIENTSECRET=${BW_TOKEN} bw login --apikey --raw
+  #      export BW_SESSION=$(bw unlock --passwordenv BW_MASTER --raw)
+  #      bw export --output bitwarden.json --format json --raw
+  #      python3 /app/vaultsync.py
+  #      bw logout
+  #  env:
+  #    - name: TZ
+  #      value: Asia/Seoul
+  #  envFrom:
+  #    - secretRef:
+  #        name: VW_URL
+  #    - secretRef:
+  #        name: VW_ID
+  #    - secretRef:
+  #        name: VW_TOKEN
+  #    - secretRef:
+  #        name: VW_MASTER
+  #    - secretRef:
+  #        name: BW_ID
+  #    - secretRef:
+  #        name: BW_TOKEN
+  #    - secretRef:
+  #        name: BW_MASTER
+  #  resources: {}
+  #    # We usually recommend not to specify default resources and to leave this as a conscious
+  #    # choice for the user. This also increases chances charts run on environments with little
+  #    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  #    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #    # limits:
+  #    #   cpu: 100m
+  #    #   memory: 128Mi
+  #    # requests:
+  #    #   cpu: 100m
+  #    #   memory: 128Mi
+  #  concurrencyPolicy: Forbid
+  #  restartPolicy: Never
+  #  successfulJobsHistoryLimit: 3
+  #  failedJobsHistoryLimit: 1
+  #  nodeSelector: {}
+  #  tolerations: []
+  #  affinity: {}
+  #  securityContext: {}
+  #    # capabilities:
+  #    #   drop:
+  #    #   - ALL
+  #    # readOnlyRootFilesystem: true
+  #    # runAsNonRoot: true
+  #    # runAsUser: 1000
 
 oci:
+  token: ""
+  bucket: ""
   par_url: ""
 
 vaultwarden:

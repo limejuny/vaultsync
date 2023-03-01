@@ -47,7 +47,7 @@ for v_id, v_data in v_item.items():
 # i_json to file
 with open('import.json', 'w') as f:
     json.dump(i_json, f)
-    os.system("bw import bitwardenjson import.json")
+os.system("bw import bitwardenjson import.json")
 
 # delete items not in vaultwarden from bitwarden
 for b_id in b_item.keys():
