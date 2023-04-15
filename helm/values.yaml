@@ -98,19 +98,3 @@ jobs:
   #    # readOnlyRootFilesystem: true
   #    # runAsNonRoot: true
   #    # runAsUser: 1000
-
-oci:
-  token: ""
-  bucket: ""
-  par_url: ""
-
-vaultwarden:
-  server_url: ""
-  client_id: ""
-  client_secret: ""
-  master_password: ""
-
-bitwarden:
-  client_id: ""
-  client_secret: ""
-  master_password: ""
