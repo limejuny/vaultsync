@@ -32,6 +32,16 @@ jobs:
     restartPolicy: Never
     successfulJobsHistoryLimit: 3
     failedJobsHistoryLimit: 3
+    affinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - vaultwarden
+            topologyKey: kubernetes.io/hostname
   #- name: vaultsync
   #  image:
   #    repository: limejuny/bw-cli
