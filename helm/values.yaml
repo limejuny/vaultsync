@@ -14,6 +14,7 @@ jobs:
         cp -r /data/rsa_key.* /app/data
         cp -r /data/attachments /app/data
         cp -r /data/sends /app/data
+        ls -lh /app/data
         export DATE=$(date +%Y%m%d-%H%M)
         tar -zcvf $DATE.tar.gz data
         curl -X PUT -T $DATE.tar.gz $PAR_URL/data/vault-$DATE.tar.gz
@@ -26,11 +27,11 @@ jobs:
     volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: vaultwarden
+          claimName: vaultwarden-pvc
     concurrencyPolicy: Forbid
     restartPolicy: Never
-    successfulJobsHistoryLimit: 1
-    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
   #- name: vaultsync
   #  image:
   #    repository: limejuny/bw-cli
