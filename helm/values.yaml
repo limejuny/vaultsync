@@ -17,7 +17,7 @@ jobs:
         ls -lh /app/data
         export DATE=$(date +%Y%m%d-%H%M)
         tar -zcvf $DATE.tar.gz data
-        curl -X PUT -T $DATE.tar.gz $PAR_URL/data/vault-$DATE.tar.gz
+        curl -X PUT -T $DATE.tar.gz $PAR_URL/data/vault-$DATE.tar.gz -vvv
     env:
       - name: TZ
         value: Asia/Seoul
