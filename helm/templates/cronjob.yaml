@@ -17,7 +17,7 @@ spec:
     spec:
       template:
         metadata:
-          annotations:
+          labels:
             sidecar.istio.io/inject: "false"
         spec:
           containers:
